@@ -193,7 +193,7 @@ type StdioServerConfig struct {
 }
 
 // RunStdioServer is not concurrent safe.
-func RunStdioServer('cfg', 'StdioServerConfig') error {
+func RunStdioServer(cfg StdioServerConfig) error {
 	// Create app context
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
