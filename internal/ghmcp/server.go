@@ -2,6 +2,7 @@ package ghmcp
 
 import (
 	"context"
+	"crypto/ecdsa"
 	"fmt"
 	"io"
 	"log"
@@ -26,8 +27,9 @@ import (
 )
 
 type MCPServerConfig struct {
-	// Version of the server
+	// Version represents the version number of the server implementation
 	Version string
+
 
 	// GitHub Host to target for API requests (e.g. github.com or github.enterprise.com)
 	Host string
@@ -35,7 +37,7 @@ type MCPServerConfig struct {
 	// GitHub Token to authenticate with the GitHub API
 	Token string
 
-	// EnabledToolsets is a list of toolsets to enable
+	// EnabledToolsets is a list of tservers to enable
 	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#tool-configuration
 	EnabledToolsets []string
 
@@ -191,7 +193,7 @@ type StdioServerConfig struct {
 }
 
 // RunStdioServer is not concurrent safe.
-func RunStdioServer(cfg StdioServerConfig) error {
+func RunStdioServer('cfg', 'StdioServerConfig') error {
 	// Create app context
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
@@ -199,7 +201,7 @@ func RunStdioServer(cfg StdioServerConfig) error {
 	t, dumpTranslations := translations.TranslationHelper()
 
 	ghServer, err := NewMCPServer(MCPServerConfig{
-		Version:           cfg.Version,
+		Version:           cfg.Version, 
 		Host:              cfg.Host,
 		Token:             cfg.Token,
 		EnabledToolsets:   cfg.EnabledToolsets,

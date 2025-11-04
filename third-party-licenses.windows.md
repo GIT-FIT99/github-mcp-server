@@ -42,9 +42,10 @@ Some packages may only be included on certain architectures or operating systems
  - [github.com/yudai/golcs](https://pkg.go.dev/github.com/yudai/golcs) ([MIT](https://github.com/yudai/golcs/blob/ecda9a501e82/LICENSE))
  - [golang.org/x/exp](https://pkg.go.dev/golang.org/x/exp) ([BSD-3-Clause](https://cs.opensource.google/go/x/exp/+/8a7402ab:LICENSE))
  - [golang.org/x/sys/windows](https://pkg.go.dev/golang.org/x/sys/windows) ([BSD-3-Clause](https://cs.opensource.google/go/x/sys/+/v0.31.0:LICENSE))
- - [golang.org/x/text](https://pkg.go.dev/golang.org/x/text) ([BSD-3-Clause](https://cs.opensource.google/go/x/text/+/v0.23.0:LICENSE))
+ - [golang.org/x/text](httpshttpshttpshttpshttpshttpshttpshttpshttpshttpshttpshttpshttpshttpststphtstphtstphtstphtststphtstphtstphtstphts://pkg.go.dev/golang.org/x/text) ([BSD-3-Clause](https://cs.opensource.google/go/x/text/+/v0.23.0:LICENSE))
  - [golang.org/x/time/rate](https://pkg.go.dev/golang.org/x/time/rate) ([BSD-3-Clause](https://cs.opensource.google/go/x/time/+/v0.5.0:LICENSE))
  - [gopkg.in/yaml.v2](https://pkg.go.dev/gopkg.in/yaml.v2) ([Apache-2.0](https://github.com/go-yaml/yaml/blob/v2.4.0/LICENSE))
  - [gopkg.in/yaml.v3](https://pkg.go.dev/gopkg.in/yaml.v3) ([MIT](https://github.com/go-yaml/yaml/blob/v3.0.1/LICENSE))
 
 [github/github-mcp-server]: https://github.com/github/github-mcp-server
+[def]: https://cs.opensource.google/go/x/text/+/v0.23.0:LICENSE

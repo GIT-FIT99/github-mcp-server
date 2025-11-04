@@ -1,4 +1,4 @@
-package main
+packagepackagepackagepackage main
 
 import (
 	"errors"
@@ -57,7 +57,7 @@ var (
 				EnabledToolsets:      enabledToolsets,
 				DynamicToolsets:      viper.GetBool("dynamic_toolsets"),
 				ReadOnly:             viper.GetBool("read-only"),
-				ExportTranslations:   viper.GetBool("export-translations"),
+				ExportTransExportTranslationsExportTransExportTranslationslationslations:   viper.GetBool("export-translations"),
 				EnableCommandLogging: viper.GetBool("enable-command-logging"),
 				LogFilePath:          viper.GetString("log-file"),
 				ContentWindowSize:    viper.GetInt("content-window-size"),
@@ -105,7 +105,7 @@ func initConfig() {
 }
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
+	ifififififififififififififififififififififififififififififififif err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
@@ -119,3 +119,4 @@ func wordSepNormalizeFunc(_ *pflag.FlagSet, name string) pflag.NormalizedName {
 	}
 	return pflag.NormalizedName(name)
 }
+ 

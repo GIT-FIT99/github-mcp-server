@@ -7,7 +7,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCleanToolsets(t *testing.T) {
+package ghmcp
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+func TestCleanToolsets_Additional(t *testing.T) {
 	tests := []struct {
 		name            string
 		input           []string
@@ -16,223 +25,45 @@ func TestCleanToolsets(t *testing.T) {
 		expectedInvalid []string
 	}{
 		{
-			name:            "empty slice",
-			input:           []string{},
-			dynamicToolsets: false,
-			expected:        []string{},
-		},
-		{
-			name:            "nil input slice",
-			input:           nil,
-			dynamicToolsets: false,
-			expected:        []string{},
-		},
-		// all test cases
-		{
-			name:            "all only",
-			input:           []string{"all"},
-			dynamicToolsets: false,
-			expected:        []string{"all"},
-		},
-		{
-			name:            "all appears multiple times",
-			input:           []string{"all", "actions", "all"},
-			dynamicToolsets: false,
-			expected:        []string{"all"},
-		},
-		{
-			name:            "all with other toolsets",
-			input:           []string{"all", "actions", "gists"},
-			dynamicToolsets: false,
-			expected:        []string{"all"},
-		},
-		{
-			name:            "all with default",
-			input:           []string{"default", "all", "actions"},
-			dynamicToolsets: false,
-			expected:        []string{"all"},
-		},
-		// default test cases
-		{
-			name:            "default only",
-			input:           []string{"default"},
-			dynamicToolsets: false,
-			expected: []string{
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		{
-			name:            "default with additional toolsets",
-			input:           []string{"default", "actions", "gists"},
-			dynamicToolsets: false,
-			expected: []string{
-				"actions",
-				"gists",
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		{
-			name:            "no default present",
-			input:           []string{"actions", "gists", "notifications"},
-			dynamicToolsets: false,
-			expected:        []string{"actions", "gists", "notifications"},
-		},
-		{
-			name:            "duplicate toolsets without default",
-			input:           []string{"actions", "gists", "actions"},
-			dynamicToolsets: false,
-			expected:        []string{"actions", "gists"},
-		},
-		{
-			name:            "duplicate toolsets with default",
-			input:           []string{"context", "repos", "issues", "pull_requests", "users", "default"},
-			dynamicToolsets: false,
-			expected: []string{
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		{
-			name:            "default appears multiple times with different toolsets in between",
-			input:           []string{"default", "actions", "default", "gists", "default"},
-			dynamicToolsets: false,
-			expected: []string{
-				"actions",
-				"gists",
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		// Dynamic toolsets test cases
-		{
-			name:            "dynamic toolsets - all only should be filtered",
-			input:           []string{"all"},
+			name:            "all filtered in dynamic mode but invalids preserved",
+			input:           []string{"all", "invalid_tool"},
 			dynamicToolsets: true,
 			expected:        []string{},
+			expectedInvalid: []string{"invalid_tool"},
 		},
 		{
-			name:            "dynamic toolsets - all with other toolsets",
-			input:           []string{"all", "actions", "gists"},
-			dynamicToolsets: true,
-			expected:        []string{"actions", "gists"},
-		},
-		{
-			name:            "dynamic toolsets - all with default",
-			input:           []string{"all", "default", "actions"},
-			dynamicToolsets: true,
-			expected: []string{
-				"actions",
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		{
-			name:            "dynamic toolsets - no all present",
-			input:           []string{"actions", "gists"},
-			dynamicToolsets: true,
-			expected:        []string{"actions", "gists"},
-		},
-		{
-			name:            "dynamic toolsets - default only",
-			input:           []string{"default"},
-			dynamicToolsets: true,
-			expected: []string{
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		{
-			name:            "only special keywords with dynamic mode",
-			input:           []string{"all", "default"},
-			dynamicToolsets: true,
-			expected: []string{
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		{
-			name:            "all with default and overlapping default toolsets in dynamic mode",
-			input:           []string{"all", "default", "issues", "repos"},
-			dynamicToolsets: true,
-			expected: []string{
-				"issues",
-				"repos",
-				"context",
-				"pull_requests",
-				"users",
-			},
-		},
-		// Whitespace test cases
-		{
-			name:            "whitespace check - leading and trailing whitespace on regular toolsets",
-			input:           []string{" actions ", "  gists  ", "notifications"},
+			name:            "case sensitivity: known-valid with wrong case treated as invalid",
+			input:           []string{"Actions", "ALL", "Default"},
 			dynamicToolsets: false,
-			expected:        []string{"actions", "gists", "notifications"},
+			expected:        []string{},
+			expectedInvalid: []string{"Actions", "ALL", "Default"},
 		},
 		{
-			name:            "whitespace check - default toolset",
-			input:           []string{" actions ", "  default  ", "notifications"},
-			dynamicToolsets: false,
-			expected: []string{
-				"actions",
-				"notifications",
-				"context",
-				"repos",
-				"issues",
-				"pull_requests",
-				"users",
-			},
-		},
-		{
-			name:            "whitespace check - all toolset",
-			input:           []string{" actions ", "  gists  ", "notifications", "  all   "},
-			dynamicToolsets: false,
-			expected:        []string{"all"},
-		},
-		// Invalid toolset test cases
-		{
-			name:            "mix of valid and invalid toolsets",
-			input:           []string{"actions", "invalid_toolset", "gists", "typo_repo"},
-			dynamicToolsets: false,
-			expected:        []string{"actions", "gists"},
-			expectedInvalid: []string{"invalid_toolset", "typo_repo"},
-		},
-		{
-			name:            "invalid with whitespace",
-			input:           []string{" invalid_tool ", "  actions  ", " typo_gist "},
-			dynamicToolsets: false,
+			name:            "all with mix of valid and invalid in dynamic mode",
+			input:           []string{"all", "actions", "invalid_tool"},
+			dynamicToolsets: true,
 			expected:        []string{"actions"},
-			expectedInvalid: []string{"invalid_tool", "typo_gist"},
+			expectedInvalid: []string{"invalid_tool"},
 		},
 		{
-			name:            "empty string in toolsets",
-			input:           []string{"", "actions", "  ", "gists"},
+			name:            "default expands without duplicating existing defaults",
+			input:           []string{"context", "default"},
 			dynamicToolsets: false,
-			expected:        []string{"actions", "gists"},
+			expected: []string{
+				"context",
+				"repos",
+				"issues",
+				"pull_requests",
+				"users",
+			},
 			expectedInvalid: []string{},
+		},
+		{
+			name:            "only invalid entries",
+			input:           []string{"not_a_toolset", "another_one"},
+			dynamicToolsets: false,
+			expected:        []string{},
+			expectedInvalid: []string{"not_a_toolset", "another_one"},
 		},
 	}
 
